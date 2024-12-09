@@ -1,3 +1,4 @@
+import Link from "next/link";
 import auth from "../app/middleware";
 import { LoginButton } from "./LoginButton";
 import { LogoutButton } from "./LogoutButton";
@@ -9,8 +10,12 @@ export async function UserInfo() {
     <div>
       {session ? (
         <div>
-          {session.user.name}{" "}
-          <span className="text-xs text-zinc-400 mr-3">#{session.user.id}</span>
+          <Link href={"/users/" + session.user.id}>
+            {session.user.name}{" "}
+            <span className="text-xs text-zinc-400 mr-3">
+              #{session.user.id}
+            </span>
+          </Link>
           <LogoutButton />
         </div>
       ) : (

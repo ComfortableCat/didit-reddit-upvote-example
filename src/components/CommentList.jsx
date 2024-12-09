@@ -1,9 +1,10 @@
 import { db } from "@/db";
 import { CommentForm } from "./CommentForm";
 import Image from "next/image";
+import Link from "next/link";
 
 export async function CommentList({ postId, parentCommentId = null }) {
-  const commentQuery = `SELECT comments.id, comments.body, users.name, users.image FROM comments JOIN users ON comments.user_id = users.id WHERE post_id = $1 AND parent_comment_id ${
+  const commentQuery = `SELECT comments.id, comments.user_id, comments.body, users.name, users.image FROM comments JOIN users ON comments.user_id = users.id WHERE post_id = $1 AND parent_comment_id ${
     parentCommentId ? `= $2` : `IS NULL`
   }`;
   const commentArgs = [postId];
@@ -25,7 +26,9 @@ export async function CommentList({ postId, parentCommentId = null }) {
               height={32}
               className="rounded-full"
             />
-            <span className="font-bold text-zinc-400">{comment.name}</span>
+            <span className="font-bold text-zinc-400">
+              <Link href={"/users/" + comment.user_id}>{comment.name}</Link>
+            </span>
           </div>
           <div className="ml-4 border-l border-zinc-300 pl-2 flex flex-col space-y-1">
             <span className="pl-4">{comment.body}</span>
