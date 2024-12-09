@@ -3,6 +3,22 @@ import { CommentList } from "@/components/CommentList";
 import { Vote } from "@/components/Vote";
 import { db } from "@/db";
 
+export async function generateMetadata({ params }) {
+  // read route params
+  const postId = (await params).postId;
+
+  // fetch data
+  const post = (
+    await db.query("SELECT posts.title FROM posts WHERE posts.id = $1", [
+      postId,
+    ])
+  ).rows[0];
+
+  return {
+    title: post.title,
+  };
+}
+
 export default async function SinglePostPage({ params }) {
   const postId = params.postId;
 
